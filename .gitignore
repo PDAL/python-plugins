@@ -1,0 +1,9 @@
+.vscode/
+_skbuild/
+MANIFEST
+dist/
+*.egg-info/
+*.o
+*.so
+*.dylib
+.DS_Store
