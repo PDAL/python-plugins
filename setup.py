@@ -5,7 +5,7 @@ with open("README.rst", "r", encoding="utf-8") as fp:
 
 setup(
     name="pdal-plugins",
-    version="1.0.0",
+    version="1.0.1",
     description="Point cloud data processing Python plugins",
     license="BSD",
     keywords="point cloud spatial",
