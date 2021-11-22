@@ -49,7 +49,7 @@ jobs:
 
   dist:
     name: Distribution
-    needs: [windows, unix]
+    needs: [build]
 
     runs-on: ${{ matrix.os }}
     strategy:
