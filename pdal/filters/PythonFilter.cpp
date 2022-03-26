@@ -41,6 +41,10 @@
 #include <pdal/util/ProgramArgs.hpp>
 #include <pdal/util/FileUtils.hpp>
 
+#if defined(snprintf)
+#undef snprintf
+#endif
+
 namespace pdal
 {
 
