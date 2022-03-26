@@ -38,9 +38,11 @@ jobs:
           python=${{ matrix.python-version }}
 
     - name: Install
+      shell: bash -l {0}
       run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
 
     - name: Test
+      shell: bash -l {0}
       env:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
