@@ -49,6 +49,7 @@ jobs:
         export PYTHONHOME=$CONDA_PREFIX
         export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
         pdal --drivers
+        ls $PDAL_DRIVER_PATH
         $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
         $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
 
