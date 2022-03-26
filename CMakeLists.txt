@@ -21,8 +21,6 @@ find_package(PDAL 2.4 REQUIRED)
 function(pdal_python_target_compile_settings target)
     set_property(TARGET ${target} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${target} PROPERTY CXX_STANDARD_REQUIRED TRUE)
-    target_compile_definitions(${target} PRIVATE
-        -DWIN32_LEAN_AND_MEAN)
     if (MSVC)
         # check for MSVC 8+
         if (NOT (MSVC_VERSION VERSION_LESS 1400))
@@ -31,6 +29,8 @@ function(pdal_python_target_compile_settings target)
                 -D_CRT_SECURE_NO_WARNINGS
                 -D_CRT_NONSTDC_NO_WARNING
                 -D_SCL_SECURE_NO_WARNINGS
+                -DWIN32_LEAN_AND_MEAN
+                -DDHAVE_SNPRINTF
             )
             target_compile_options(${target} PRIVATE
                 # Yes, we don't understand GCC pragmas
