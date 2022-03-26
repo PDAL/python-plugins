@@ -38,6 +38,8 @@
 #undef toupper
 #undef tolower
 #undef isspace
+#undef snprintf
+#undef vsnprintf
 
 #include <pdal/pdal_internal.hpp>
 #include <pdal/Metadata.hpp>
