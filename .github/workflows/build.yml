@@ -32,14 +32,15 @@ jobs:
       uses: mamba-org/provision-with-micromamba@main
       with:
         environment-file: .github/environment.yml
+        cache-env: false
         extra-specs: |
           python=${{ matrix.python-version }}
 
     - name: Print commands
       shell: cmd /C CALL {0}
-      run: |
+      run: >-
         echo on
- 
+        micromamba info && micromamba list
         gdalinfo --version
         pdal --drivers
         pdal --version
@@ -49,7 +50,7 @@ jobs:
 
     - name: Test
       shell: cmd /C CALL {0}
-      run: |
+      run: >-
         echo on
         set PYTHONHOME=%CONDA_PREFIX%
         echo "conda prefix %CONDA_PREFIX%"
