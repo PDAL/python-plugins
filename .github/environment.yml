@@ -4,4 +4,4 @@ channels:
 dependencies:
   - scikit-build
   - numpy
-  - pdal=2.3.0
+  - pdal
