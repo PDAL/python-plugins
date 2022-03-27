@@ -36,7 +36,7 @@ jobs:
         channels: conda-forge
         auto-update-conda: true
         python-version: ${{ matrix.python-version }}
-        environment-file: ./github/environment.yml
+        environment-file: ./.github/environment.yml
 
     - name: Install
       run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
