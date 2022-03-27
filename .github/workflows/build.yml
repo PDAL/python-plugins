@@ -47,9 +47,11 @@ jobs:
     - name: Test
       shell: cmd /C CALL {0}
       run: |
+        echo on
         set PYTHONHOME=%CONDA_PREFIX%
         echo "conda prefix %CONDA_PREFIX%"
-        set PDAL_DRIVER_PATH= python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))"
+        python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))" > pdal-driver-path.txt
+        set /p PDAL_DRIVER_PATH=<pdal-driver-path.txt
         echo %PDAL_DRIVER_PATH%
         dir %PDAL_DRIVER_PATH%
         gdalinfo --version

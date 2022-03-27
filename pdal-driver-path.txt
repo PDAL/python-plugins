@@ -1,0 +1,1 @@
+_skbuild\win-amd64-3.8\cmake-build
