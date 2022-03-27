@@ -41,6 +41,15 @@ jobs:
         activate-environment: test
         environment-file: ./.github/environment.yml
 
+    - name: Print commands
+      shell: cmd /C CALL {0}
+      run: |
+        echo on
+ 
+        gdalinfo --version
+        pdal --drivers
+        pdal --version
+
     - name: Install
       run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
 
@@ -48,8 +57,21 @@ jobs:
       shell: cmd /C CALL {0}
       run: |
         echo on
-
+        set PYTHONHOME=%CONDA_PREFIX%
+        echo "conda prefix %CONDA_PREFIX%"
+        python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))" > pdal-driver-path.txt
+        set /p PDAL_DRIVER_PATH=<pdal-driver-path.txt
+        echo %PDAL_DRIVER_PATH%
+        dir %PDAL_DRIVER_PATH%
         gdalinfo --version
+        pdal --drivers
+        pdal --version
+        echo %PATH%
+        dir %PDAL_DRIVER_PATH%/pdal_filters_python_test.exe
+        dir %PDAL_DRIVER_PATH%/pdal_io_numpy_test.exe
+
+        %PDAL_DRIVER_PATH%/pdal_filters_python_test.exe
+        %PDAL_DRIVER_PATH%/pdal_io_numpy_test.exe
 
 
 
