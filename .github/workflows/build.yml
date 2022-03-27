@@ -40,20 +40,26 @@ jobs:
     - uses: ilammy/msvc-dev-cmd@v1
       if: ${{ matrix.os == 'windows-2019' }}
 
-    - name: Install
+    - name: Status commands
       shell: bash -l {0}
-      run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
-
-    - name: Test
-      shell: bash -l {0}
-      env:
-        EXT: ${{ matrix.os == 'windows-2019' && '.exe' || '' }}
       run: |
-        export PYTHONHOME=$CONDA_PREFIX
-        export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
-        pdal --drivers
-        $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
-        $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
+        gdalinfo --version
+        pdal --version
+
+    # - name: Install
+    #   shell: bash -l {0}
+    #   run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
+
+    # - name: Test
+    #   shell: bash -l {0}
+    #   env:
+    #     EXT: ${{ matrix.os == 'windows-2019' && '.exe' || '' }}
+    #   run: |
+    #     export PYTHONHOME=$CONDA_PREFIX
+    #     export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
+    #     pdal --drivers
+    #     $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
+    #     $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
 
   dist:
     name: Distribution
