@@ -34,8 +34,10 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         channels: conda-forge
+        miniforge-version: latest
         auto-update-conda: true
         python-version: ${{ matrix.python-version }}
+        activate-environment: test
         environment-file: ./.github/environment.yml
 
     - name: Install
