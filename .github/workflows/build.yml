@@ -40,7 +40,6 @@ jobs:
       run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
 
     - name: Test
-      shell: bash -l {0}
       env:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
@@ -49,6 +48,8 @@ jobs:
         export PDAL_DRIVER_PATH="${PDAL_DRIVER_PATH//\\//}"
         echo "$PDAL_DRIVER_PATH"
         ls $PDAL_DRIVER_PATH
+        pdal --drivers
+        echo $PATH
 
         ls -al $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
         ls -alh $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
