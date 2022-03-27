@@ -54,7 +54,6 @@ jobs:
         gdalinfo --version
         pdal --drivers
         pdal --version
-        `pdal` 
         echo $PATH
 
         ls -al $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
