@@ -47,8 +47,9 @@ jobs:
       env:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
-
+        set -x 
         export PYTHONHOME=$CONDA_PREFIX
+        echo "conda prefix $CONDA_PREFIX"
         export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
         export PDAL_DRIVER_PATH="${PDAL_DRIVER_PATH//\\//}"
         echo "$PDAL_DRIVER_PATH"
