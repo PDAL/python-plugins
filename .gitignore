@@ -7,3 +7,4 @@ dist/
 *.so
 *.dylib
 .DS_Store
+.github/workflows/cmd-build.yml

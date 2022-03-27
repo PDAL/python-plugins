@@ -37,6 +37,9 @@ jobs:
         extra-specs: |
           python=${{ matrix.python-version }}
 
+    - uses: ilammy/msvc-dev-cmd@v1
+      if: ${{ matrix.os == 'windows-2019' }}
+
     - name: Install
       shell: bash -l {0}
       run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
@@ -44,7 +47,7 @@ jobs:
     - name: Test
       shell: bash -l {0}
       env:
-        EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+        EXT: ${{ matrix.os == 'windows-2019' && '.exe' || '' }}
       run: |
         export PYTHONHOME=$CONDA_PREFIX
         export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
