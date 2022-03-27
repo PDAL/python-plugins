@@ -31,12 +31,11 @@ jobs:
     - name: Check out
       uses: actions/checkout@v2
 
-    - name: Setup micromamba
-      uses: mamba-org/provision-with-micromamba@main
+    - uses: conda-incubator/setup-miniconda@v2
       with:
-        environment-file: .github/environment.yml
-        extra-specs: |
-          python=${{ matrix.python-version }}
+        channels: conda-forge
+        auto-update-conda: true
+        python-version: ${{ matrix.python-version }}
 
     - name: Install
       run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
@@ -45,7 +44,7 @@ jobs:
       env:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
-        micromamba info && micromamba list
+
         export PYTHONHOME=$CONDA_PREFIX
         export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
         export PDAL_DRIVER_PATH="${PDAL_DRIVER_PATH//\\//}"
