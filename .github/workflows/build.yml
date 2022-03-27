@@ -56,8 +56,8 @@ jobs:
 
         ls -al $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
         ls -alh $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
-        $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
-        $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
+       # $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
+       # $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
 
   dist:
     name: Distribution
