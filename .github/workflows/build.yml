@@ -11,10 +11,6 @@ on:
     types:
       - published
 
-defaults:
-  run:
-    shell: bash -l {0}
-
 
 jobs:
   build:
@@ -32,14 +28,12 @@ jobs:
     - name: Check out
       uses: actions/checkout@v2
 
-    - uses: conda-incubator/setup-miniconda@v2
+    - name: Setup micromamba
+      uses: mamba-org/provision-with-micromamba@main
       with:
-        channels: conda-forge
-        miniforge-version: latest
-        auto-update-conda: true
-        python-version: ${{ matrix.python-version }}
-        activate-environment: test
-        environment-file: ./.github/environment.yml
+        environment-file: .github/environment.yml
+        extra-specs: |
+          python=${{ matrix.python-version }}
 
     - name: Print commands
       shell: cmd /C CALL {0}
