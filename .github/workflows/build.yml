@@ -11,6 +11,9 @@ on:
     types:
       - published
 
+defaults:
+  run:
+    shell: bash -l {0}
 
 
 jobs:
