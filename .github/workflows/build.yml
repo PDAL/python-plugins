@@ -39,7 +39,6 @@ jobs:
           python=${{ matrix.python-version }}
 
     - name: Install
-      shell: bash -l {0}
       run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
 
     - name: Test
@@ -52,9 +51,10 @@ jobs:
         export PDAL_DRIVER_PATH="${PDAL_DRIVER_PATH//\\//}"
         echo "$PDAL_DRIVER_PATH"
         ls $PDAL_DRIVER_PATH
+        gdalinfo --version
         pdal --drivers
         pdal --version
-        pdal 
+        `pdal` 
         echo $PATH
 
         ls -al $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
