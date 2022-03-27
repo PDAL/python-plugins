@@ -11,6 +11,9 @@ on:
     types:
       - published
 
+defaults:
+  run:
+    shell: bash -l -eo pipefail {0}
 
 jobs:
   build:
@@ -20,9 +23,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-#        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         os: [ 'windows-2019']
-        python-version: ['3.10']
+        python-version: [ '3.10']
 
     steps:
     - name: Check out
@@ -32,47 +34,23 @@ jobs:
       uses: mamba-org/provision-with-micromamba@main
       with:
         environment-file: .github/environment.yml
-        cache-env: false
         extra-specs: |
           python=${{ matrix.python-version }}
 
-    - name: Print commands
-      shell: cmd /C CALL {0}
-      run: |
-        echo on
-        micromamba info && micromamba list
-        conda update --all -y
-        gdalinfo --version
-        pdal --drivers
-        pdal --version
-
     - name: Install
-      shell: cmd /C CALL {0}
-      run: |
-        set SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" 
-        pip install -e .
+      shell: bash -l {0}
+      run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
 
     - name: Test
-      shell: cmd /C CALL {0}
+      shell: bash -l {0}
+      env:
+        EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
-        echo on
-        set PYTHONHOME=%CONDA_PREFIX%
-        echo "conda prefix %CONDA_PREFIX%"
-        python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))" > pdal-driver-path.txt
-        set /p PDAL_DRIVER_PATH=<pdal-driver-path.txt
-        echo %PDAL_DRIVER_PATH%
-        dir %PDAL_DRIVER_PATH%
-        gdalinfo --version
+        export PYTHONHOME=$CONDA_PREFIX
+        export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
         pdal --drivers
-        pdal --version
-        echo %PATH%
-        dir %PDAL_DRIVER_PATH%/pdal_filters_python_test.exe
-        dir %PDAL_DRIVER_PATH%/pdal_io_numpy_test.exe
-
-        %PDAL_DRIVER_PATH%/pdal_filters_python_test.exe
-        %PDAL_DRIVER_PATH%/pdal_io_numpy_test.exe
-
-
+        $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
+        $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
 
   dist:
     name: Distribution
