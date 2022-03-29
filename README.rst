@@ -31,7 +31,7 @@ The repository for PDAL's Python plugins is available at https://github.com/PDAL
 Requirements
 ================================================================================
 
-* PDAL 2.2+
-* Python >=3.6
+* PDAL 2.4+
+* Python >=3.7
 * Numpy (eg :code:`pip install numpy`)
 * scikit-build (eg :code:`pip install scikit-build`)
