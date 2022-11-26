@@ -39,7 +39,7 @@ jobs:
 
     - name: Install
       shell: bash -l {0}
-      run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install -e .
+      run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install .
 
     - name: Test
       shell: bash -l {0}
