@@ -53,7 +53,7 @@ Script::Script( const std::string& source,
 
 std::ostream& operator << (std::ostream& os, Script const& script)
 {
-    os << "source=[" << strlen(script.source()) << " bytes], ";
+    os << "source=[" << (int)strlen(script.source()) << " bytes], ";
     os << "module=" << script.module() << ", ";
     os << "function=" << script.function();
     os << std::endl;
