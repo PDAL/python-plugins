@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 option(WITH_TESTS "Enable tests" OFF)
-set(CMAKE_BUILD_TYPE "Release")
 
 # Python-finding settings
 set(Python3_FIND_STRATEGY "LOCATION")
