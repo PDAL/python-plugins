@@ -47,6 +47,7 @@
 
 #include "Redirector.hpp"
 #include "Script.hpp"
+#include "gil.hpp"
 
 namespace pdal
 {

@@ -122,6 +122,7 @@ Invocation::Invocation(const Script& script, MetadataNode m,
     m_script(script), m_inputMetadata(m), m_pdalargs(pdalArgs)
 {
     Environment::get();
+    gil_scoped_acquire acquire;
     compile();
 }
 
@@ -357,6 +358,7 @@ PyObject* getPyJSON(std::string const& s)
 // Returns a new reference to a dictionary of numpy arrays/names.
 PyObject *Invocation::prepareData(PointViewPtr& view)
 {
+    gil_scoped_acquire acquire;
     PointLayoutPtr layout(view->m_pointTable.layout());
     Dimension::IdList const& dims = layout->dims();
 

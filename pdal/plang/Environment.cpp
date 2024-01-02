@@ -116,6 +116,7 @@ EnvironmentPtr Environment::get()
     {
         g_environment = new Environment();
     };
+    gil_scoped_acquire acquire;
     std::call_once(flag, init);
     return g_environment;
 }
@@ -150,8 +151,10 @@ Environment::Environment()
             throw pdal_error("unable to add redirector module!");
     }
 
+
     initNumpy();
     PyImport_ImportModule("redirector");
+
 }
 
 Environment::~Environment()
