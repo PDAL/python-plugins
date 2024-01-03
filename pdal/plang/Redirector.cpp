@@ -7,6 +7,7 @@
 // Blog article: http://mateusz.loskot.net/?p=2819
 
 #include "Redirector.hpp"
+#include "gil.hpp"
 
 #pragma warning(disable: 4127)  // conditional expression is constant
 #pragma warning(disable: 4068)  // gcc pragma warnings
@@ -30,6 +31,7 @@ struct Stdout
 
 static PyObject* Stdout_write(PyObject* self, PyObject* args)
 {
+    gil_scoped_acquire acquire;
     std::size_t written(0);
     Stdout* selfimpl = reinterpret_cast<Stdout*>(self);
     if (selfimpl->write)
@@ -48,6 +50,7 @@ static PyObject* Stdout_write(PyObject* self, PyObject* args)
 
 static PyObject* Stdout_flush(PyObject* self, PyObject* /*args*/)
 {
+    gil_scoped_acquire acquire;
     Stdout *selfimpl = reinterpret_cast<Stdout *>(self);
     if (selfimpl->flush)
     {
@@ -151,9 +154,12 @@ static struct PyModuleDef redirectordef = {
 
 PyObject* Redirector::init()
 {
+    gil_scoped_acquire acquire;
     StdoutType.tp_new = PyType_GenericNew;
     if (PyType_Ready(&StdoutType) < 0)
+    {
         return NULL;
+    }
     PyObject* m = PyModule_Create(&redirectordef);
     if (m)
     {
@@ -171,6 +177,8 @@ PyObject* Redirector::init()
 
 void Redirector::set_stdout(std::ostream* ostr)
 {
+    gil_scoped_acquire acquire;
+
     stdout_write_type writeFunc = [ostr](std::string msg) { *ostr << msg; };
     stdout_flush_type flushFunc = [ostr]{ ostr->flush(); };
 
@@ -180,6 +188,8 @@ void Redirector::set_stdout(std::ostream* ostr)
 
 void Redirector::set_stdout(stdout_write_type write, stdout_flush_type flush)
 {
+    gil_scoped_acquire acquire;
+
     if (!m_stdout)
     {
         m_stdout_saved =
@@ -196,11 +206,15 @@ void Redirector::set_stdout(stdout_write_type write, stdout_flush_type flush)
 
 void Redirector::reset_stdout()
 {
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+
     if (m_stdout_saved)
         PySys_SetObject(const_cast<char*>("stdout"), m_stdout_saved);
 
     Py_XDECREF(m_stdout);
     m_stdout = 0;
+    PyGILState_Release(gstate);
 }
 
 } //namespace plang

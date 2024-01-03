@@ -114,7 +114,19 @@ EnvironmentPtr Environment::get()
 
     auto init = []()
     {
+        PyGILState_STATE gstate;
+
+        // If the interpreter is already initialized, we need to
+        // grab the GIL and hold it before we go do any Python
+        // stuff
+        bool alreadyInitialized(Py_IsInitialized());
+        if (alreadyInitialized)
+            gstate = PyGILState_Ensure();
+
         g_environment = new Environment();
+
+        if (alreadyInitialized)
+            PyGILState_Release(gstate);
     };
     std::call_once(flag, init);
     return g_environment;
@@ -150,8 +162,10 @@ Environment::Environment()
             throw pdal_error("unable to add redirector module!");
     }
 
+
     initNumpy();
     PyImport_ImportModule("redirector");
+
 }
 
 Environment::~Environment()

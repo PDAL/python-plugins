@@ -198,6 +198,7 @@ PyArrayObject* load_npy_script(std::string const& source,
 void NumpyReader::initialize()
 {
     plang::Environment::get();
+    plang::gil_scoped_acquire acquire;
     m_numPoints = 0;
     m_chunkCount = 0;
     m_ndims = 0;
@@ -424,6 +425,7 @@ void NumpyReader::addDimensions(PointLayoutPtr layout)
 {
     using namespace Dimension;
 
+    plang::gil_scoped_acquire acquire;
     wakeUpNumpyArray();
     createFields(layout);
 
@@ -485,6 +487,7 @@ void NumpyReader::addDimensions(PointLayoutPtr layout)
 
 void NumpyReader::ready(PointTableRef table)
 {
+    plang::gil_scoped_acquire acquire;
     plang::Environment::get()->set_stdout(log()->getLogStream());
 
     // Set our iterators
@@ -528,6 +531,8 @@ bool NumpyReader::nextPoint()
     // just advance by the stride.
     if (--m_chunkCount == 0)
     {
+        // Go grab the gil before we touch Python stuff again
+        plang::gil_scoped_acquire acquire;
         // If we can't fetch the next ite
         if (!m_iternext(m_iter))
             return false;
@@ -653,6 +658,7 @@ bool NumpyReader::processOne(PointRef& point)
 
 point_count_t NumpyReader::read(PointViewPtr view, point_count_t numToRead)
 {
+    plang::gil_scoped_acquire acquire;
     PointId idx = view->size();
     point_count_t numRead(0);
 
@@ -670,8 +676,8 @@ point_count_t NumpyReader::read(PointViewPtr view, point_count_t numToRead)
 
 void NumpyReader::done(PointTableRef)
 {
+    plang::gil_scoped_acquire acquire;
     // Dereference everything we're using
-
     if (m_iter)
         NpyIter_Deallocate(m_iter);
 

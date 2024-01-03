@@ -148,6 +148,7 @@ PointViewSet PythonFilter::run(PointViewPtr view)
     log()->get(LogLevel::Debug5) << "filters.python " << *m_script <<
         " processing " << (int)view->size() << " points." << std::endl;
 
+    plang::gil_scoped_acquire acquire;
     m_pythonMethod->execute(view, getMetadata());
 
     PointViewSet viewSet;
