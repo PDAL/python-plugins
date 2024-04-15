@@ -48,7 +48,7 @@ jobs:
 
     - name: Test Unix
       shell: bash -l {0}
-      if: matrix.platform != 'windows-latest'
+      if: matrix.os != 'windows-latest'
       run: |
         export PYTHONHOME=$CONDA_PREFIX
         export WHEEL_DIR=$(python -m "scikit_build_core.builder.wheel_tag")
@@ -61,7 +61,7 @@ jobs:
 
 
     - name: Test Windows
-      if: matrix.platform == 'windows-latest'
+      if: matrix.os == 'windows-latest'
       shell: bash -l {0}
       env:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
