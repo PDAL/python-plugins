@@ -50,7 +50,8 @@ jobs:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
         export PYTHONHOME=$CONDA_PREFIX
-        export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
+        #export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
+        export PDAL_DRIVER_PATH=`pwd`:/build
         echo PDAL_DRIVER_PATH
         ls $PDAL_DRIVER_PATH
         pdal --drivers
@@ -66,7 +67,7 @@ jobs:
       fail-fast: true
       matrix:
         os: ['ubuntu-latest']
-        python-version: ['3.9']
+        python-version: ['3.11']
 
     steps:
     - uses: actions/checkout@v4
@@ -81,12 +82,12 @@ jobs:
 
     - name: Dependencies
       shell: bash -l {0}
-      run: mamba install --yes --quiet -c conda-forge scikit-build numpy python=${{ matrix.python-version }} pybind11 pdal
+      run: mamba install --yes --quiet -c conda-forge build python=${{ matrix.python-version }} pdal
 
     - name: sdist
       shell: bash -l {0}
       run: |
-        python setup.py sdist
+        python -m build . --sdist
         ls dist
 
     - uses: pypa/gh-action-pypi-publish@release/v1
