@@ -35,14 +35,14 @@
 #ifndef UNITTEST_TESTCONFIG_INCLUDED
 #define UNITTEST_TESTCONFIG_INCLUDED
 
-#define UNITTEST_TESTCONFIG_DATA_PATH "./pdal/test/data/"
-#define UNITTEST_TESTCONFIG_CONFIGURED_PATH "./pdal/test/data/"
+#define UNITTEST_TESTCONFIG_DATA_PATH "./src/pdal/test/data/"
+#define UNITTEST_TESTCONFIG_CONFIGURED_PATH "./src/pdal/test/data/"
 #define UNITTEST_TESTCONFIG_BINARY_PATH ""
 #define UNITTEST_TESTCONFIG_OCI_CONNECTION ""
 
 #include <string>
 
-namespace TestConfig 
+namespace TestConfig
 {
 
 inline std::string dataPath()

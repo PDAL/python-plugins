@@ -13,7 +13,7 @@ set(Python3_FIND_FRAMEWORK "LAST")
 find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 
 # find PDAL. Require 2.1+
-find_package(PDAL 2.4 REQUIRED)
+find_package(PDAL 2.6 REQUIRED)
 
 # Taken and adapted from PDAL's cmake macros.cmake
 
@@ -160,12 +160,12 @@ endif()
 
 PDAL_PYTHON_ADD_PLUGIN(numpy_reader reader numpy
     FILES
-        ./pdal/io/NumpyReader.cpp
-        ./pdal/io/NumpyReader.hpp
-        ./pdal/plang/Invocation.cpp
-        ./pdal/plang/Environment.cpp
-        ./pdal/plang/Redirector.cpp
-        ./pdal/plang/Script.cpp
+        ./src/pdal/io/NumpyReader.cpp
+        ./src/pdal/io/NumpyReader.hpp
+        ./src/pdal/plang/Invocation.cpp
+        ./src/pdal/plang/Environment.cpp
+        ./src/pdal/plang/Redirector.cpp
+        ./src/pdal/plang/Script.cpp
     LINK_WITH
         ${PDAL_LIBRARIES}
         ${Python3_LIBRARIES}
@@ -180,12 +180,12 @@ PDAL_PYTHON_ADD_PLUGIN(numpy_reader reader numpy
 
 PDAL_PYTHON_ADD_PLUGIN(python_filter filter python
     FILES
-        ./pdal/filters/PythonFilter.cpp
-        ./pdal/filters/PythonFilter.hpp
-        ./pdal/plang/Invocation.cpp
-        ./pdal/plang/Environment.cpp
-        ./pdal/plang/Redirector.cpp
-        ./pdal/plang/Script.cpp
+        ./src/pdal/filters/PythonFilter.cpp
+        ./src/pdal/filters/PythonFilter.hpp
+        ./src/pdal/plang/Invocation.cpp
+        ./src/pdal/plang/Environment.cpp
+        ./src/pdal/plang/Redirector.cpp
+        ./src/pdal/plang/Script.cpp
     LINK_WITH
         ${PDAL_LIBRARIES}
         ${Python3_LIBRARIES}
@@ -202,17 +202,17 @@ PDAL_PYTHON_ADD_PLUGIN(python_filter filter python
 if (WITH_TESTS)
     enable_testing()
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    add_subdirectory(pdal/test/gtest)
+    add_subdirectory(src/pdal/test/gtest)
     enable_testing()
     include_directories(pdal/test/gtest/include .. ${CMAKE_CURRENT_BINARY_DIR})
     PDAL_PYTHON_ADD_TEST(pdal_io_numpy_test
         FILES
-            ./pdal/test/NumpyReaderTest.cpp
-            ./pdal/test/Support.cpp
-            ./pdal/plang/Invocation.cpp
-            ./pdal/plang/Environment.cpp
-            ./pdal/plang/Redirector.cpp
-            ./pdal/plang/Script.cpp
+            ./src/pdal/test/NumpyReaderTest.cpp
+            ./src/pdal/test/Support.cpp
+            ./src/pdal/plang/Invocation.cpp
+            ./src/pdal/plang/Environment.cpp
+            ./src/pdal/plang/Redirector.cpp
+            ./src/pdal/plang/Script.cpp
         LINK_WITH
             ${numpy_reader}
             ${Python3_LIBRARIES}
@@ -225,12 +225,12 @@ if (WITH_TESTS)
     )
     PDAL_PYTHON_ADD_TEST(pdal_filters_python_test
         FILES
-            ./pdal/test/PythonFilterTest.cpp
-            ./pdal/test/Support.cpp
-            ./pdal/plang/Invocation.cpp
-            ./pdal/plang/Environment.cpp
-            ./pdal/plang/Redirector.cpp
-            ./pdal/plang/Script.cpp
+            ./src/pdal/test/PythonFilterTest.cpp
+            ./src/pdal/test/Support.cpp
+            ./src/pdal/plang/Invocation.cpp
+            ./src/pdal/plang/Environment.cpp
+            ./src/pdal/plang/Redirector.cpp
+            ./src/pdal/plang/Script.cpp
         LINK_WITH
             ${python_filter}
             ${Python3_LIBRARIES}

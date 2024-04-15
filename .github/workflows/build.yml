@@ -42,7 +42,7 @@ jobs:
 
     - name: Install
       shell: bash -l {0}
-      run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install .
+      run: pip install . -Ccmake.define.WITH_TESTS=ON .
 
     - name: Test
       shell: bash -l {0}
