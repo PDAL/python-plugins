@@ -2,6 +2,6 @@ name: test
 channels:
   - conda-forge
 dependencies:
-  - scikit-build
+  - scikit-build-core
   - numpy
   - pdal
