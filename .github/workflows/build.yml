@@ -50,7 +50,7 @@ jobs:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
         export PYTHONHOME=$CONDA_PREFIX
-        export PDAL_DRIVER_PATH=`pwd`/build/$(python -c "scikit_build_core.builder.wheel_tag")
+        export PDAL_DRIVER_PATH=`pwd`/build/$(python -m "scikit_build_core.builder.wheel_tag")
         echo $PDAL_DRIVER_PATH
         ls $PDAL_DRIVER_PATH
         pdal --drivers
