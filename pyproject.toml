@@ -63,8 +63,8 @@ sdist.include = [
   "src",
   "CMakeLists.txt"
 ]
-cmake.verbose = false
-logging.level = "ERROR"
+cmake.verbose = true
+logging.level = "INFO"
 
 #[tool.scikit-build.cmake.define]
 #WITH_TESTS = "ON"
