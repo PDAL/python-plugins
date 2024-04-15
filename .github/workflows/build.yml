@@ -52,7 +52,7 @@ jobs:
       run: |
         export PYTHONHOME=$CONDA_PREFIX
         export WHEEL_DIR=$(python -m "scikit_build_core.builder.wheel_tag")
-        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR
+        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR/Release
         echo $PDAL_DRIVER_PATH
         ls $PDAL_DRIVER_PATH
         pdal --drivers
@@ -68,7 +68,7 @@ jobs:
       run: |
         export PYTHONHOME=$CONDA_PREFIX
         export WHEEL_DIR=$(python -m "scikit_build_core.builder.wheel_tag")
-        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR/Release
+        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR/Release/Release
         echo $PDAL_DRIVER_PATH
         ls $PDAL_DRIVER_PATH
         pdal --drivers
