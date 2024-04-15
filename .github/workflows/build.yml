@@ -50,50 +50,11 @@ jobs:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
         export PYTHONHOME=$CONDA_PREFIX
-        #export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
-        export PDAL_DRIVER_PATH=`pwd`/build
-        echo PDAL_DRIVER_PATH
+        export PDAL_DRIVER_PATH=`pwd`/build/$(python -c "scikit_build_core.builder.wheel_tag")
+        echo $PDAL_DRIVER_PATH
         ls $PDAL_DRIVER_PATH
         pdal --drivers
         $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
         $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
 
-  dist:
-    name: Distribution
-    needs: [build]
 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: ['ubuntu-latest']
-        python-version: ['3.11']
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup micromamba
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        miniforge-variant: Mambaforge
-        miniforge-version: latest
-        use-mamba: true
-        auto-update-conda: true
-        mamba-version: "*"
-
-    - name: Dependencies
-      shell: bash -l {0}
-      run: mamba install --yes --quiet -c conda-forge build python=${{ matrix.python-version }} pdal
-
-    - name: sdist
-      shell: bash -l {0}
-      run: |
-        python -m build . --sdist
-        ls dist
-
-    - uses: pypa/gh-action-pypi-publish@release/v1
-      name: Publish package
-      if: github.event_name == 'release' && github.event.action == 'published'
-      with:
-        user: __token__
-        password: ${{ secrets.pypi_token }}
-        packages_dir: ./dist
