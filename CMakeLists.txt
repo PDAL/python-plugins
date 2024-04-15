@@ -10,7 +10,8 @@ option(WITH_TESTS "Enable tests" OFF)
 set(Python3_FIND_STRATEGY "LOCATION")
 set(Python3_FIND_REGISTRY "LAST")
 set(Python3_FIND_FRAMEWORK "LAST")
-find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
+find_package(Python3 COMPONENTS Interpreter Development.Module Development.Embed NumPy REQUIRED)
+
 
 # find PDAL. Require 2.1+
 find_package(PDAL 2.6 REQUIRED)
@@ -96,7 +97,7 @@ macro(PDAL_PYTHON_ADD_PLUGIN _name _type _shortname)
     )
     target_link_options(${${_name}} BEFORE PRIVATE ${PDAL_PYTHON_ADD_PLUGIN_COMPILE_OPTIONS})
     target_compile_definitions(${${_name}} PRIVATE
-        PDAL_PYTHON_LIBRARY="${PYTHON_LIBRARY}" PDAL_DLL_EXPORT)
+        PDAL_PYTHON_LIBRARY="${Python3_LIBRARIES}" PDAL_DLL_EXPORT)
     target_compile_definitions(${${_name}} PRIVATE PDAL_DLL_EXPORT)
     if (PDAL_PYTHON_ADD_PLUGIN_SYSTEM_INCLUDES)
         target_include_directories(${${_name}} SYSTEM PRIVATE
@@ -141,7 +142,7 @@ macro(PDAL_PYTHON_ADD_TEST _name)
             ${WINSOCK_LIBRARY}
     )
     target_compile_definitions(${_name} PRIVATE
-        PDAL_PYTHON_LIBRARY="${PYTHON_LIBRARY}")
+        PDAL_PYTHON_LIBRARY="${Python3_LIBRARIES}")
     add_test(NAME ${_name}
         COMMAND
             "${PROJECT_BINARY_DIR}/bin/${_name}"

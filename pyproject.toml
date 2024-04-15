@@ -53,6 +53,10 @@ changelog = "https://github.com/PDAL/python-plugins/blob/main/README.rst"
 requires = ["scikit-build-core", "numpy",  "pybind11[global]"]
 build-backend = "scikit_build_core.build"
 
+#[tool.scikit-build-core]
+#wheel.py-api = "cp12"
+#wheel.cmake = true
+
 
 [tool.scikit-build]
 build-dir = "build/{wheel_tag}"
