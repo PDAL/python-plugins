@@ -1,6 +1,6 @@
 {
   "pipeline":[
-    "./pdal/test/data/autzen-utm.las",
+    "./src/pdal/test/data/autzen-utm.las",
     {
       "type":"filters.python",
       "function":"myfunc",

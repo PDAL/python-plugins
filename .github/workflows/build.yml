@@ -36,63 +36,43 @@ jobs:
         miniforge-variant: Mambaforge
         miniforge-version: latest
         use-mamba: true
+        python-version: ${{ matrix.python-version }}
         auto-update-conda: true
         environment-file: .github/environment.yml
 
 
     - name: Install
       shell: bash -l {0}
-      run: SKBUILD_CONFIGURE_OPTIONS="-DWITH_TESTS=ON" pip install .
+      run: |
+        pip install . -Ccmake.define.WITH_TESTS=ON .
 
-    - name: Test
+    - name: Test Unix
+      shell: bash -l {0}
+      if: matrix.os != 'windows-latest'
+      run: |
+        export PYTHONHOME=$CONDA_PREFIX
+        export WHEEL_DIR=$(python -m "scikit_build_core.builder.wheel_tag")
+        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR/Release
+        echo $PDAL_DRIVER_PATH
+        ls $PDAL_DRIVER_PATH
+        pdal --drivers
+        $PDAL_DRIVER_PATH/pdal_filters_python_test
+        $PDAL_DRIVER_PATH/pdal_io_numpy_test
+
+
+    - name: Test Windows
+      if: matrix.os == 'windows-latest'
       shell: bash -l {0}
       env:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
         export PYTHONHOME=$CONDA_PREFIX
-        export PDAL_DRIVER_PATH=$(python -c "import os, skbuild; print(os.path.join(skbuild.constants.SKBUILD_DIR(), 'cmake-build'))")
-        echo PDAL_DRIVER_PATH
+        export WHEEL_DIR=$(python -m "scikit_build_core.builder.wheel_tag")
+        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR/Release/Release
+        echo $PDAL_DRIVER_PATH
         ls $PDAL_DRIVER_PATH
         pdal --drivers
         $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
         $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
 
-  dist:
-    name: Distribution
-    needs: [build]
 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: ['ubuntu-latest']
-        python-version: ['3.9']
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup micromamba
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        miniforge-variant: Mambaforge
-        miniforge-version: latest
-        use-mamba: true
-        auto-update-conda: true
-        mamba-version: "*"
-
-    - name: Dependencies
-      shell: bash -l {0}
-      run: mamba install --yes --quiet -c conda-forge scikit-build numpy python=${{ matrix.python-version }} pybind11 pdal
-
-    - name: sdist
-      shell: bash -l {0}
-      run: |
-        python setup.py sdist
-        ls dist
-
-    - uses: pypa/gh-action-pypi-publish@release/v1
-      name: Publish package
-      if: github.event_name == 'release' && github.event.action == 'published'
-      with:
-        user: __token__
-        password: ${{ secrets.pypi_token }}
-        packages_dir: ./dist

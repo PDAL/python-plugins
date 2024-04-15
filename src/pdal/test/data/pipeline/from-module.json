@@ -1,9 +1,9 @@
 {
   "pipeline":[
-    "./pdal/test/data/1.2-with-color.las",
+    "./src/pdal/test/data/1.2-with-color.las",
     {
       "type": "filters.python",
-      "script": "./pdal/test/data/test1.py",
+      "script": "./src/pdal/test/data/test1.py",
       "module": "anything",
       "function": "fff"
     }
