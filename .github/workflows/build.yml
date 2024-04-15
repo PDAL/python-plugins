@@ -43,15 +43,32 @@ jobs:
 
     - name: Install
       shell: bash -l {0}
-      run: pip install . -Ccmake.define.WITH_TESTS=ON .
+      run: |
+        pip install . -Ccmake.define.WITH_TESTS=ON .
 
-    - name: Test
+    - name: Test Unix
+      shell: bash -l {0}
+      if: matrix.platform != 'windows-latest'
+      run: |
+        export PYTHONHOME=$CONDA_PREFIX
+        export WHEEL_DIR=$(python -m "scikit_build_core.builder.wheel_tag")
+        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR
+        echo $PDAL_DRIVER_PATH
+        ls $PDAL_DRIVER_PATH
+        pdal --drivers
+        $PDAL_DRIVER_PATH/pdal_filters_python_test
+        $PDAL_DRIVER_PATH/pdal_io_numpy_test
+
+
+    - name: Test Windows
+      if: matrix.platform == 'windows-latest'
       shell: bash -l {0}
       env:
         EXT: ${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       run: |
         export PYTHONHOME=$CONDA_PREFIX
-        export PDAL_DRIVER_PATH=`pwd`/build/$(python -m "scikit_build_core.builder.wheel_tag")
+        export WHEEL_DIR=$(python -m "scikit_build_core.builder.wheel_tag")
+        export PDAL_DRIVER_PATH=`pwd`/build/$WHEEL_DIR/Release
         echo $PDAL_DRIVER_PATH
         ls $PDAL_DRIVER_PATH
         pdal --drivers
