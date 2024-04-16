@@ -1136,7 +1136,7 @@ TEST_P(jsonWithProgrammable, pipeline)
         std::cerr << "WARNING: could not create filters.programmable, skipping test" << std::endl;
 }
 
-INSTANTIATE_TEST_CASE_P(plugins, jsonWithProgrammable,
+INSTANTIATE_TEST_SUITE_P(plugins, jsonWithProgrammable,
                         testing::Values(
                             // "pipeline/programmable-hag.json",
                             "pipeline/programmable-update-y-dims.json"
@@ -1155,7 +1155,7 @@ TEST_P(jsonWithPredicate, pipeline)
         std::cerr << "WARNING: could not create filters.python, skipping test" << std::endl;
 }
 
-INSTANTIATE_TEST_CASE_P(plugins, jsonWithPredicate,
+INSTANTIATE_TEST_SUITE_P(plugins, jsonWithPredicate,
                         testing::Values(
                             "pipeline/crop_wkt_2d_classification.json",
                             "pipeline/from-module.json",

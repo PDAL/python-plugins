@@ -201,6 +201,8 @@ PDAL_PYTHON_ADD_PLUGIN(python_filter filter python
 
 
 if (WITH_TESTS)
+    set(GOOGLETEST_VERSION 1.12.1)
+
     enable_testing()
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     add_subdirectory(src/pdal/test/gtest)
