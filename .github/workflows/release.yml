@@ -1,3 +1,5 @@
+name: Release
+
 on:
   release:
     types:
@@ -15,14 +17,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v4
+    - name: Setup micromamba
+      uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: '3.x'
+        miniforge-variant: Mambaforge
+        miniforge-version: latest
+        use-mamba: true
+        python-version: ${{ matrix.python-version }}
+        auto-update-conda: true
+        environment-file: .github/environment.yml
+
     - name: Install dependencies
       run: |
-        python -m pip install build
-        pip install build twine
-        python -m build . --sdist
+        python -m pip install build pipx twine
+        pipx run build --sdist -Ccmake.define.CMAKE_BUILD_WITH_INSTALL_RPATH=ON
     - name: Publish package distributions to PyPI
       if: github.event_name == 'release' && github.event.action == 'published'
       uses: pypa/gh-action-pypi-publish@release/v1
