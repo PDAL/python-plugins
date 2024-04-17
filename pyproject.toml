@@ -33,7 +33,7 @@ dependencies = [
 
 #[tool.scikit-build.dynamic]
 #version = { attr = "pdal.__version__" }
-version="1.4.0"
+version="1.4.4"
 
 [project.optional-dependencies]
 test = [
