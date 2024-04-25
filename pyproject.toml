@@ -29,15 +29,10 @@ dependencies = [
   "numpy"
 ]
 
-#dynamic = ["version"]
-
-#[tool.scikit-build.dynamic]
-#version = { attr = "pdal.__version__" }
-version="1.4.4"
+version="1.5.0"
 
 [project.optional-dependencies]
-test = [
-]
+test = [ ]
 
 [tool.setuptools]
 package-dir = {"" =  "src"}
