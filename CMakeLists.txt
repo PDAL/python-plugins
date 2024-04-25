@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11.0)
 project(pdal-python-plugins)
 project(pdal-python-plugins VERSION ${SKBUILD_PROJECT_VERSION}
                             DESCRIPTION "PDAL Python Plugins"
-                            HOMEPAGE_URL "https://github.com/PDAL/pdal-plugins")
+                            HOMEPAGE_URL "https://github.com/PDAL/python-plugins")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
