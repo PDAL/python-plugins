@@ -39,8 +39,11 @@
 #include "Environment.hpp"
 #include "Redirector.hpp"
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#define NPY_TARGET_VERSION NPY_1_22_API_VERSION
+#define NPY_NO_DEPRECATED_API NPY_1_22_API_VERSION
+
 #define PY_ARRAY_UNIQUE_SYMBOL PDAL_ARRAY_API
+
 #include <numpy/arrayobject.h>
 #include <pdal/util/FileUtils.hpp>
 #include <pdal/util/Utils.hpp>
