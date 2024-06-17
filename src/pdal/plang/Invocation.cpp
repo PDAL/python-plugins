@@ -258,10 +258,11 @@ void *Invocation::extractArray(PyObject *array, std::string const& name,
 
     num_elements = (size_t)nPoints;
 
-    if (static_cast<uint32_t>(dtype->elsize) != Dimension::size(t))
+    npy_intp elsize = PyDataType_ELSIZE(dtype);
+    if (static_cast<uint32_t>(elsize) != Dimension::size(t))
     {
         std::ostringstream oss;
-        oss << "dtype of array has size " << dtype->elsize
+        oss << "dtype of array has size " << elsize
             << " but PDAL dimension '" << name << "' has byte size of "
             << Dimension::size(t) << " bytes.";
         throw pdal_error(oss.str());

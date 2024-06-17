@@ -377,8 +377,9 @@ void NumpyReader::createFields(PointLayoutPtr layout)
     int offset;
 
     m_numFields = 0;
-    if (m_dtype->fields != Py_None)
-        m_numFields = static_cast<int>(PyDict_Size(m_dtype->fields));
+    PyObject* fields = PyDataType_FIELDS(m_dtype);
+    if (fields != Py_None)
+        m_numFields = static_cast<int>(PyDict_Size(fields));
 
     // Array isn't structured - just a bunch of data.
     if (m_numFields <= 0)
@@ -389,7 +390,7 @@ void NumpyReader::createFields(PointLayoutPtr layout)
     }
     else
     {
-        PyObject* names_dict = m_dtype->fields;
+        PyObject* names_dict = fields;
         PyObject* names = PyDict_Keys(names_dict);
         PyObject* values = PyDict_Values(names_dict);
         if (!names || !values)
@@ -413,7 +414,7 @@ void NumpyReader::createFields(PointLayoutPtr layout)
             type = getType(dt, name);
 
             char byteorder = dt->byteorder;
-            int elsize = dt->elsize;
+            int elsize = (int) PyDataType_ELSIZE(dt);
             id = registerDim(layout, name, type);
             m_fields.push_back({id, type, offset, byteorder, elsize});
         }
