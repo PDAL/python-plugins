@@ -235,6 +235,11 @@ bool Invocation::execute(PointViewPtr& v, MetadataNode stageMetadata)
 }
 
 
+#if NPY_ABI_VERSION < 0x02000000
+  #define PyDataType_FIELDS(descr) ((descr)->fields)
+  #define PyDataType_ELSIZE(descr) ((descr)->elsize)
+#endif
+
 // Returns a pointer to the data in Numpy array, 'array'.
 void *Invocation::extractArray(PyObject *array, std::string const& name,
     Dimension::Type t, size_t& num_elements)

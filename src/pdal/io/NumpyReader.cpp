@@ -45,6 +45,10 @@
 
 #include "../plang/Environment.hpp"
 
+#if NPY_ABI_VERSION < 0x02000000
+  #define PyDataType_FIELDS(descr) ((descr)->fields)
+  #define PyDataType_ELSIZE(descr) ((descr)->elsize)
+#endif
 
 std::string toString(PyObject *pname)
 {
