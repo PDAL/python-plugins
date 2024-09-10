@@ -365,7 +365,7 @@ PyObject* getPyJSON(std::string const& s)
 PyObject *Invocation::prepareData(PointViewPtr& view)
 {
     gil_scoped_acquire acquire;
-    PointLayoutPtr layout(view->m_pointTable.layout());
+    PointLayoutPtr layout(view->table().layout());
     Dimension::IdList const& dims = layout->dims();
 
     PyObject *arrays = PyDict_New();
@@ -373,11 +373,12 @@ PyObject *Invocation::prepareData(PointViewPtr& view)
     {
         Dimension::Id d = *di;
         const Dimension::Detail *dd = layout->dimDetail(d);
+        Dimension::Type dimType = view->dimType(d);
         void *data = malloc(dd->size() * view->size());
         char *p = (char *)data;
         for (PointId idx = 0; idx < view->size(); ++idx)
         {
-            view->getFieldInternal(d, idx, (void *)p);
+            view->getField((char*)p, d, dimType, idx);
             p += dd->size();
         }
         std::string name = layout->dimName(*di);
@@ -444,7 +445,7 @@ void Invocation::extractData(PointViewPtr& view, PyObject *arrays)
 
     StringList names = dictKeys(arrays);
 
-    PointLayoutPtr layout(view->m_pointTable.layout());
+    PointLayoutPtr layout(view->table().layout());
 
     for (auto& name : names)
         if (layout->findDim(name) == Dimension::Id::Unknown)

@@ -29,7 +29,7 @@ dependencies = [
   "numpy >= 1.22"
 ]
 
-version="1.5.2"
+version="1.6.0"
 
 [project.optional-dependencies]
 test = [ ]
