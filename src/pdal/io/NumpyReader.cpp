@@ -167,7 +167,10 @@ PyArrayObject* load_npy_file(std::string const& filename)
     if (!array)
         throw pdal::pdal_error(plang::getTraceback());
 
-    return reinterpret_cast<PyArrayObject*>(array);
+    PyArrayObject* output = reinterpret_cast<PyArrayObject*>(array);
+    if (!output)
+        throw pdal_error(plang::getTraceback());
+    return output;
 }
 
 PyArrayObject* load_npy_script(std::string const& source,
@@ -198,7 +201,10 @@ PyArrayObject* load_npy_script(std::string const& source,
 
     Py_XDECREF(scriptArgs);
 
-    return reinterpret_cast<PyArrayObject*>(array);
+    PyArrayObject* output = reinterpret_cast<PyArrayObject*>(array);
+    if (!output)
+        throw pdal_error(plang::getTraceback());
+    return output;
 }
 
 void NumpyReader::initialize()
