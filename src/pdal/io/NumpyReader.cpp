@@ -142,6 +142,8 @@ PyArrayObject* load_npy_file(std::string const& filename)
 {
 
     PyObject *py_filename =  PyUnicode_FromString(filename.c_str());
+    if (!py_filename)
+        throw pdal::pdal_error(plang::getTraceback());
     PyObject *numpy_module = PyImport_ImportModule("numpy");
     if (!numpy_module)
         throw pdal::pdal_error(plang::getTraceback());
