@@ -43,7 +43,7 @@
 #include <pdal/util/Algorithm.hpp>
 #include <pdal/util/Extractor.hpp>
 
-#include "../plang/Environment.hpp"
+
 
 #if NPY_ABI_VERSION < 0x02000000
   #define PyDataType_FIELDS(descr) ((descr)->fields)
@@ -138,6 +138,7 @@ void NumpyReader::setArray(PyObject* array)
     Py_XINCREF(m_array);
 }
 
+
 PyArrayObject* load_npy_file(std::string const& filename)
 {
 
@@ -167,10 +168,11 @@ PyArrayObject* load_npy_file(std::string const& filename)
     if (!array)
         throw pdal::pdal_error(plang::getTraceback());
 
-    PyArrayObject* output = reinterpret_cast<PyArrayObject*>(array);
-    if (!output)
-        throw pdal_error(plang::getTraceback());
-    return output;
+
+    PyArrayObject* nparray = reinterpret_cast<PyArrayObject*>(array);
+    if (!PyArray_Check(array))
+        throw pdal_error("Numpy file did not return an array!");
+    return nparray;
 }
 
 PyArrayObject* load_npy_script(std::string const& source,
@@ -201,10 +203,10 @@ PyArrayObject* load_npy_script(std::string const& source,
 
     Py_XDECREF(scriptArgs);
 
-    PyArrayObject* output = reinterpret_cast<PyArrayObject*>(array);
-    if (!output)
-        throw pdal_error(plang::getTraceback());
-    return output;
+    if (!PyArray_Check(array))
+        throw pdal_error("Numpy script did not return an array!");
+
+    return reinterpret_cast<PyArrayObject*>(array);
 }
 
 void NumpyReader::initialize()
