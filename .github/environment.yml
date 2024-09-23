@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - scikit-build-core
-  - numpy = 1
+  - numpy
   - pdal
   - compilers
   - python
