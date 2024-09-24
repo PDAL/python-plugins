@@ -25,6 +25,7 @@ jobs:
       matrix:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         python-version: ['3.9', '3.10', '3.11', '3.12']
+        numpy-version: ['1.26', '2.0', '2.1']
 
     steps:
     - name: Check out
@@ -40,6 +41,10 @@ jobs:
         auto-update-conda: true
         environment-file: .github/environment.yml
 
+    - name: Install Numpy ${{ matrix.numpy-version }}
+      shell: bash -l {0}
+      run: |
+        mamba install python=${{ matrix.numpy-version }}
 
     - name: Install
       shell: bash -l {0}
