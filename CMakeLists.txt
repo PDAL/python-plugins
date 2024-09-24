@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 3.11.0)
-project(pdal-python-plugins)
+cmake_minimum_required(VERSION 3.13.0)
 project(pdal-python-plugins VERSION ${SKBUILD_PROJECT_VERSION}
                             DESCRIPTION "PDAL Python Plugins"
                             HOMEPAGE_URL "https://github.com/PDAL/python-plugins")
