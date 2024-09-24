@@ -145,7 +145,7 @@ Environment::Environment()
 // #define NUMPY_IMPORT_ARRAY_RETVAL VOID
 
 #if NPY_ABI_VERSION < 0x02000000
-        import_array();
+        _import_array();
 #else
         PyArray_ImportNumPyAPI();
 #endif
