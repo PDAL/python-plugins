@@ -159,7 +159,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # executable. PDAL plugins need to link against libpython, but if a plugin
     # is loaded inside a python process, it must resolve symbols from the python
     # executable instead of libpython. Using flat namespace allows that.
-    set(PYTHON_LINK_LIBRARY ${PYTHON_LINK_LIBRARY} -Wl,-flat_namespace)
+    #    set(PYTHON_LINK_LIBRARY ${PYTHON_LINK_LIBRARY} -Wl,-flat_namespace)
 endif()
 
 PDAL_PYTHON_ADD_PLUGIN(numpy_reader reader numpy
