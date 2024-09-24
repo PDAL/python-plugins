@@ -17,7 +17,7 @@ defaults:
 
 jobs:
   build:
-    name: Build ${{ matrix.os }} py${{ matrix.python-version }}
+    name: ${{ matrix.os }} py${{ matrix.python-version }} numpy${{ matrix.numpy-version }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -44,7 +44,7 @@ jobs:
     - name: Install Numpy ${{ matrix.numpy-version }}
       shell: bash -l {0}
       run: |
-        mamba install python=${{ matrix.numpy-version }}
+        mamba install numpy=${{ matrix.numpy-version }}
 
     - name: Install
       shell: bash -l {0}
