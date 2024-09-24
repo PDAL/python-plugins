@@ -43,7 +43,7 @@
 #include <pdal/util/Algorithm.hpp>
 #include <pdal/util/Extractor.hpp>
 
-#include "../plang/Environment.hpp"
+
 
 #if NPY_ABI_VERSION < 0x02000000
   #define PyDataType_FIELDS(descr) ((descr)->fields)
@@ -138,10 +138,13 @@ void NumpyReader::setArray(PyObject* array)
     Py_XINCREF(m_array);
 }
 
+
 PyArrayObject* load_npy_file(std::string const& filename)
 {
 
     PyObject *py_filename =  PyUnicode_FromString(filename.c_str());
+    if (!py_filename)
+        throw pdal::pdal_error(plang::getTraceback());
     PyObject *numpy_module = PyImport_ImportModule("numpy");
     if (!numpy_module)
         throw pdal::pdal_error(plang::getTraceback());
@@ -165,7 +168,11 @@ PyArrayObject* load_npy_file(std::string const& filename)
     if (!array)
         throw pdal::pdal_error(plang::getTraceback());
 
-    return reinterpret_cast<PyArrayObject*>(array);
+
+    PyArrayObject* nparray = reinterpret_cast<PyArrayObject*>(array);
+    if (!PyArray_Check(array))
+        throw pdal_error("Numpy file did not return an array!");
+    return nparray;
 }
 
 PyArrayObject* load_npy_script(std::string const& source,
@@ -195,6 +202,9 @@ PyArrayObject* load_npy_script(std::string const& source,
         throw pdal_error(plang::getTraceback());
 
     Py_XDECREF(scriptArgs);
+
+    if (!PyArray_Check(array))
+        throw pdal_error("Numpy script did not return an array!");
 
     return reinterpret_cast<PyArrayObject*>(array);
 }
@@ -350,32 +360,24 @@ Dimension::Id NumpyReader::registerDim(PointLayoutPtr layout,
     return id;
 }
 
-namespace
-{
-
-
-Dimension::Type getType(PyArray_Descr *dtype, const std::string& name)
-{
-    if (!dtype)
-        throw pdal_error("Can't fetch data type for numpy field.");
-
-    Dimension::Type pdalType =
-        plang::Environment::getPDALDataType(dtype->type_num);
-    if (pdalType == Dimension::Type::None)
-    {
-        std::ostringstream oss;
-        oss << "Unable to map dimension '" << name << "' because its "
-            "type '" << dtype->type_num <<"' is not mappable to PDAL";
-        throw pdal_error(oss.str());
-    }
-    return pdalType;
-}
-
-} // unnamed namespace
-
 
 void NumpyReader::createFields(PointLayoutPtr layout)
 {
+
+    auto getPDALType = [](int type_num, const std::string& name)
+    {
+        Dimension::Type pdalType =
+            plang::Environment::getPDALDataType(type_num);
+        if (pdalType == Dimension::Type::None)
+        {
+            std::ostringstream oss;
+            oss << "Unable to map dimension '" << name << "' because its "
+                "type '" << type_num <<"' is not mappable to PDAL";
+            throw pdal_error(oss.str());
+        }
+        return pdalType;
+    };
+
     Dimension::Id id;
     Dimension::Type type;
     int offset;
@@ -388,7 +390,7 @@ void NumpyReader::createFields(PointLayoutPtr layout)
     // Array isn't structured - just a bunch of data.
     if (m_numFields <= 0)
     {
-        type = getType(m_dtype, m_defaultDimension);
+        type = getPDALType(m_dtype->type_num, m_defaultDimension);
         id = registerDim(layout, m_defaultDimension, type);
         m_fields.push_back({id, type, 0});
     }
@@ -415,7 +417,7 @@ void NumpyReader::createFields(PointLayoutPtr layout)
 
             // Get type.
             PyArray_Descr* dt = (PyArray_Descr *)PySequence_Fast_GET_ITEM(tup, 0);
-            type = getType(dt, name);
+            type = getPDALType(dt->type_num, name);
 
             char byteorder = dt->byteorder;
             int elsize = (int) PyDataType_ELSIZE(dt);

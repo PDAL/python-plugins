@@ -39,12 +39,8 @@
 #include "Environment.hpp"
 #include "Redirector.hpp"
 
-#define NPY_TARGET_VERSION NPY_1_22_API_VERSION
-#define NPY_NO_DEPRECATED_API NPY_1_22_API_VERSION
 
-#define PY_ARRAY_UNIQUE_SYMBOL PDAL_ARRAY_API
-
-#include <numpy/arrayobject.h>
+#include <numpy/ndarrayobject.h>
 #include <pdal/util/FileUtils.hpp>
 #include <pdal/util/Utils.hpp>
 
@@ -145,9 +141,12 @@ Environment::Environment()
     // the return.
     auto initNumpy = []()
     {
-// #undef NUMPY_IMPORT_ARRAY_RETVAL
-// #define NUMPY_IMPORT_ARRAY_RETVAL VOID
+
+#if NPY_ABI_VERSION < 0x02000000
         _import_array();
+#else
+        PyArray_ImportNumPyAPI();
+#endif
         return ;
     };
 
@@ -164,7 +163,6 @@ Environment::Environment()
         if (!added)
             throw pdal_error("unable to add redirector module!");
     }
-
 
     initNumpy();
     PyImport_ImportModule("redirector");

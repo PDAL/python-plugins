@@ -37,13 +37,11 @@
 #include <pdal/Reader.hpp>
 #include <pdal/Streamable.hpp>
 
+#include "../plang/Environment.hpp"
 #include "../plang/Invocation.hpp"
 
-#include <Python.h>
-#define NPY_NO_DEPRECATED_API NPY_1_22_API_VERSION
-#define PY_ARRAY_UNIQUE_SYMBOL PDAL_ARRAY_API
-#define NO_IMPORT_ARRAY
-#include <numpy/arrayobject.h>
+#define NO_IMPORT_ARRAY // Already have it from Environment.hpp
+#include <numpy/ndarrayobject.h>
 
 #include <memory>
 
