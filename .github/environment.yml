@@ -8,3 +8,7 @@ dependencies:
   - compilers
   - python
   - pip
+  - scikit-build-core
+  - pybind11
+  - cmake
+  - ninja
