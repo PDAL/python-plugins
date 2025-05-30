@@ -4,7 +4,7 @@ channels:
 dependencies:
   - scikit-build-core
   - numpy
-  - pdal
+  - libpdal-core
   - compilers
   - python
   - pip
