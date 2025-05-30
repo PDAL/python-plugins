@@ -69,6 +69,15 @@ jobs:
         $PDAL_DRIVER_PATH/pdal_filters_python_test
         $PDAL_DRIVER_PATH/pdal_io_numpy_test
 
+    - name: Build Source Distribution
+      shell: bash -l {0}
+      if: matrix.os == 'ubuntu-latest'
+
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install pkg-config libssl-dev -y
+        python -m pip install build pipx twine
+        pipx run build --sdist -Ccmake.define.CMAKE_BUILD_WITH_INSTALL_RPATH=ON
 
     - name: Test Windows
       if: matrix.os == 'windows-latest'
