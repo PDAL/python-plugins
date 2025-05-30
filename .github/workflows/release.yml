@@ -29,7 +29,7 @@ jobs:
         miniforge-variant: Miniforge3
         miniforge-version: latest
         use-mamba: true
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.12'
         auto-update-conda: true
         environment-file: .github/environment.yml
 
