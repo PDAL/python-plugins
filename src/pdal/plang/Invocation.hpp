@@ -42,9 +42,6 @@
 #include <pdal/Dimension.hpp>
 #include <pdal/PointView.hpp>
 
-// PDAL renamed this but it is not aliased on windows for PDAL 2.9
-#   define PDAL_DLL     PDAL_EXPORT
-
 namespace pdal
 {
 namespace plang

@@ -38,8 +38,10 @@
 
 #include <pdal/Options.hpp>
 
+#ifndef PDAL_DLL
 // PDAL renamed this but it is not aliased on windows for PDAL 2.9
 #   define PDAL_DLL     PDAL_EXPORT
+#endif
 
 namespace pdal
 {
