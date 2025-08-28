@@ -552,12 +552,10 @@ TEST_F(PredicateFilterTest, PredicateFilterTest_test_programmable_4)
     PointViewPtr buf(new PointView(table));
 
     filter->prepare(table);
-    reader.prepare(table);
-    PointViewSet viewSet = reader.execute(table);
 
-//     StageWrapper::ready(reader, table);
-//     PointViewSet viewSet = StageWrapper::run(reader, buf);
-//     StageWrapper::done(reader, table);
+    StageWrapper::ready(reader, table);
+    PointViewSet viewSet = StageWrapper::run(reader, buf);
+    StageWrapper::done(reader, table);
     EXPECT_EQ(viewSet.size(), 1u);
     buf = *viewSet.begin();
     EXPECT_EQ(buf->size(), 1000u);
