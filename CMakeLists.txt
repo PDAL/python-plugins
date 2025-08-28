@@ -203,13 +203,41 @@ PDAL_PYTHON_ADD_PLUGIN(python_filter filter python
 
 
 if (WITH_TESTS)
-    set(GOOGLETEST_VERSION 1.12.1)
+    enable_testing()
 
-    enable_testing()
+    message(STATUS "Fetching GTest from GitHub ...")
+
+    # Add Google Test
+    #
+    # See https://github.com/google/googletest/blob/main/googletest/README.md
+
+    if(POLICY CMP0135)
+        cmake_policy(SET CMP0135 NEW)  # for DOWNLOAD_EXTRACT_TIMESTAMP option
+    endif()
+
+    set(GTEST_VERSION "1.15.2")
+
+    include(FetchContent)
+    FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/refs/tags/v${GTEST_VERSION}.zip
+        EXCLUDE_FROM_ALL  # ignored before CMake 3.28
+    )
+
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    add_subdirectory(src/pdal/test/gtest)
-    enable_testing()
-    include_directories(pdal/test/gtest/include .. ${CMAKE_CURRENT_BINARY_DIR})
+
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.28.0")
+        FetchContent_MakeAvailable(googletest)
+    else()
+        # Pre CMake 3.28 workaround to prevent installing files
+        FetchContent_GetProperties(googletest)
+        if(NOT googletest_POPULATED)
+          FetchContent_Populate(googletest)
+          add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR} EXCLUDE_FROM_ALL)
+        endif()
+    endif()
+
     PDAL_PYTHON_ADD_TEST(pdal_io_numpy_test
         FILES
             ./src/pdal/test/NumpyReaderTest.cpp
