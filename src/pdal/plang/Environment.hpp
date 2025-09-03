@@ -54,9 +54,6 @@
 #define NPY_API_SYMBOL_ATTRIBUTE
 #define NPY_NO_DEPRECATED_API NPY_1_22_API_VERSION
 
-// PDAL renamed this but it is not aliased on windows for PDAL 2.9
-#   define PDAL_DLL     PDAL_EXPORT
-
 namespace pdal
 {
 namespace plang

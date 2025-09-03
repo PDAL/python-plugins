@@ -136,6 +136,10 @@ uint32_t Support::diff_text_files(std::istream& str1, std::istream& str2,
         std::getline(str1, buf1);
         std::getline(str2, buf2);
 
+        // Remove \r's
+        buf1.erase( std::remove(buf1.begin(), buf1.end(), '\r'), buf1.end() );
+        buf2.erase( std::remove(buf2.begin(), buf2.end(), '\r'), buf2.end() );
+
         if (currLine == ignoreLine1)
         {
             ++currLine;
