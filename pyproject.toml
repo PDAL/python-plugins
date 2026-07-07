@@ -22,6 +22,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: GIS",
 ]
 
@@ -29,18 +31,29 @@ dependencies = [
   "numpy >= 1.22"
 ]
 
-version="1.6.6"
+version="1.6.7"
 
 [project.optional-dependencies]
 test = [ ]
+
+[dependency-groups]
+build = [
+  "numpy >= 1.22",
+  "pybind11[global]",
+  "scikit-build-core",
+]
+test = [ ]
+
+[tool.uv]
+package = true
 
 [tool.setuptools]
 package-dir = {"" =  "src"}
 zip-safe = false
 
 [project.urls]
-homepage = "https://pdal.io"
-documentation = "https://pdal.io"
+homepage = "https://pdal.org"
+documentation = "https://pdal.org"
 repository = "https://github.com/PDAL/python-plugins"
 changelog = "https://github.com/PDAL/python-plugins/blob/main/README.rst"
 
@@ -62,7 +75,7 @@ sdist.include = [
   "src",
   "CMakeLists.txt"
 ]
-cmake.verbose = true
+build.verbose = true
 logging.level = "INFO"
 
 #[tool.scikit-build.cmake.define]

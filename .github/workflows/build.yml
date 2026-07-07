@@ -36,6 +36,11 @@ jobs:
     - name: Check out
       uses: actions/checkout@v4
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@v8.3.1
+      with:
+        enable-cache: true
+
     - name: Setup micromamba
       uses: conda-incubator/setup-miniconda@v3
       with:
@@ -49,12 +54,14 @@ jobs:
     - name: Install Numpy ${{ matrix.numpy-version }}
       shell: bash -l {0}
       run: |
-        mamba install numpy=${{ matrix.numpy-version }}
+        PYTHON=$(python -c 'import sys; print(sys.executable)')
+        uv pip install --python "$PYTHON" --reinstall "numpy==${{ matrix.numpy-version }}.*"
 
     - name: Install
       shell: bash -l {0}
       run: |
-        pip install . -Ccmake.define.WITH_TESTS=ON .
+        PYTHON=$(python -c 'import sys; print(sys.executable)')
+        uv pip install --python "$PYTHON" --no-build-isolation -Ccmake.define.WITH_TESTS=ON .
 
     - name: Test Unix
       shell: bash -l {0}
@@ -76,8 +83,8 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install pkg-config libssl-dev -y
-        python -m pip install build pipx twine
-        pipx run build --sdist -Ccmake.define.CMAKE_BUILD_WITH_INSTALL_RPATH=ON
+        PYTHON=$(python -c 'import sys; print(sys.executable)')
+        uv build --python "$PYTHON" --sdist -Ccmake.define.CMAKE_BUILD_WITH_INSTALL_RPATH=ON
 
     - name: Test Windows
       if: matrix.os == 'windows-latest'
@@ -93,5 +100,3 @@ jobs:
         pdal --drivers
         $PDAL_DRIVER_PATH/pdal_filters_python_test$EXT
         $PDAL_DRIVER_PATH/pdal_io_numpy_test$EXT
-
-

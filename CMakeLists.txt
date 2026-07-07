@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.0)
+cmake_minimum_required(VERSION 3.15.0)
 project(pdal-python-plugins VERSION ${SKBUILD_PROJECT_VERSION}
                             DESCRIPTION "PDAL Python Plugins"
                             HOMEPAGE_URL "https://github.com/PDAL/python-plugins")
@@ -15,8 +15,8 @@ set(Python3_FIND_FRAMEWORK "LAST")
 find_package(Python3 COMPONENTS Interpreter Development.Module Development.Embed NumPy REQUIRED)
 
 
-# find PDAL. Require 2.1+
-find_package(PDAL 2.6 REQUIRED)
+# find PDAL.
+find_package(PDAL 2.7 REQUIRED)
 
 # Taken and adapted from PDAL's cmake macros.cmake
 

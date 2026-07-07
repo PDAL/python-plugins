@@ -22,7 +22,12 @@ jobs:
       fail-fast: true
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v8
+      with:
+        enable-cache: true
+
     - name: Setup micromamba
       uses: conda-incubator/setup-miniconda@v3
       with:
@@ -33,11 +38,11 @@ jobs:
         auto-update-conda: true
         environment-file: .github/environment.yml
 
-    - name: Install dependencies
+    - name: Build source distribution
       shell: bash -l {0}
       run: |
-        python -m pip install build pipx twine
-        pipx run build --sdist -Ccmake.define.CMAKE_BUILD_WITH_INSTALL_RPATH=ON
+        PYTHON=$(python -c 'import sys; print(sys.executable)')
+        uv build --python "$PYTHON" --sdist -Ccmake.define.CMAKE_BUILD_WITH_INSTALL_RPATH=ON
 
     - name: Publish package distributions to PyPI
       if: github.event_name == 'release' && github.event.action == 'published'

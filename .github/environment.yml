@@ -7,8 +7,7 @@ dependencies:
   - libpdal-core
   - compilers
   - python
-  - pip
-  - scikit-build-core
   - pybind11
   - cmake
   - ninja
+  - uv
