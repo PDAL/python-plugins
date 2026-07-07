@@ -15,8 +15,8 @@ set(Python3_FIND_FRAMEWORK "LAST")
 find_package(Python3 COMPONENTS Interpreter Development.Module Development.Embed NumPy REQUIRED)
 
 
-# find PDAL. Require 2.1+
-find_package(PDAL 2.6 REQUIRED)
+# find PDAL.
+find_package(PDAL 2.7 REQUIRED)
 
 # Taken and adapted from PDAL's cmake macros.cmake
 
