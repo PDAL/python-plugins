@@ -5,8 +5,8 @@ PDAL Python Plugins
 PDAL Python plugins allow you to process data with PDAL into
 `Numpy <http://www.numpy.org/>`__ arrays.
 They support embedding Python in PDAL pipelines with the
-`readers.numpy <https://pdal.io/stages/readers.numpy.html>`__ and
-`filters.python <https://pdal.io/stages/filters.python.html>`__ stages.
+`readers.numpy <https://pdal.org/stages/readers.numpy.html>`__ and
+`filters.python <https://pdal.orgo/stages/filters.python.html>`__ stages.
 
 Installation
 --------------------------------------------------------------------------------
