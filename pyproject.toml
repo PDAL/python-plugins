@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: GIS",
 ]
 
@@ -33,6 +34,17 @@ version="1.6.7"
 
 [project.optional-dependencies]
 test = [ ]
+
+[dependency-groups]
+build = [
+  "numpy >= 1.22",
+  "pybind11[global]",
+  "scikit-build-core",
+]
+test = [ ]
+
+[tool.uv]
+package = true
 
 [tool.setuptools]
 package-dir = {"" =  "src"}

@@ -1,7 +1,11 @@
 .vscode/
+.venv/
 _skbuild/
 MANIFEST
+build/
+build-*/
 dist/
+wheels/
 *.egg-info/
 *.o
 *.so
